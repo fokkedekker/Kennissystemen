@@ -25,8 +25,6 @@ isa(croc, reptile).
 isa(snake, reptile).
 
 % Relations
-
-
 hasa(bird,wing,2,2).
 hasa(bat,wing,2,2).
 
@@ -55,24 +53,21 @@ hasa(dolphin,3,nil).
 
 
 % Test for animal inheritence. 
-testForisa(thing, IsaList):-
-write(IsaList),!.
 
-testForisa(X, IsaList):-
+wrapertestIsa(X,[X|Isalist]):-
+testForisa(X, Isalist).
+
+testForisa(thing, []).
+
+testForisa(X, [Y|IsaList]):-
 isa(X, Y),
-append(IsaList, [Y], IsaListNew),
-testForisa(Y, IsaListNew).
-
-% Loop through animal inheritence
-hasaInherited(X, Isalist, HasaList):-
-NewHasaList = testForHasa(X, Isalist, Hasalist),
-[newX, NewIsaList] = IsaList,
-hasaInherited(newX, NewIsaList, NewHasaList).
+testForisa(Y, IsaList).
 
 % Check for animal features
-testForHasa(Animal, IsaList, HasaList):-
-hasa(Animal, Feature, Amount1, Amount2);hasaInherited(Animal,IsaList, HasaList),
-append(HasaList, [Feature], NewHasaList),
-testForHasa(Animal, IsaList, NewHasaList).
+testForHasa([],[]).
 
+testForHasa([NewAnimal|NewIsaList], HasaList):-
+findall(Feature:Lower:Uper, hasa(NewAnimal,Feature,Lower,Uper), InheritedHasaList),
+testForHasa(NewIsaList, NewHasaList),
+append(NewHasaList,InheritedHasaList, HasaList).
 
