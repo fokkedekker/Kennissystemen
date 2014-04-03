@@ -17,6 +17,11 @@ testForisa(X, [Y|IsaList]):-
 isa(X, Y),
 testForisa(Y, IsaList).
 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Number restriction predicates  %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 % Predicates to find al associated features
 testForHasa([],[]).
 
@@ -29,9 +34,6 @@ hasall(Animal,Feature,Lower,Upper):-
 wrapertestIsa(Animal,P),
 testForHasa(P,Q),
 member(Feature:Lower:Upper,Q).
-
-
-
 
 % predicate to get animals by features
 getAnimals([Feature:Lower:Upper],AnimalList):-
@@ -50,6 +52,39 @@ getAnimals([Feature:Lower:Upper],Relephant),
 intersection(Relephant,ReturnAnimalList,CheckedReturnList),
 checkFeatures(FeatureList,CheckedReturnList).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Value restriction tests %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Predicates to find al associated features
+testForHasaValue([],[]).
+
+testForHasaValue([NewAnimal|NewIsaList], HasaList):-
+findall(Feature:Value, valueHasa(NewAnimal,Feature,Value), InheritedHasaList),
+testForHasaValue(NewIsaList, NewHasaList),
+append(NewHasaList,InheritedHasaList, HasaList).
+
+hasallValue(Animal,Feature,Value):-
+wrapertestIsa(Animal,P),
+testForHasaValue(P,Q),
+member(Feature:Value,Q).
+
+% predicate to get animals by features
+getAnimalsValue([Feature:Value],AnimalList):-
+findall(Animal, hasallValue(Animal,Feature,Value), AnimalList).
+
+getAnimalsValue([Feature:Value|FeatureList], AnimalList):-
+findall(Animal, hasallValue(Animal,Feature,Value), NewAnimalList),
+getAnimalsValue(FeatureList, TotalAnimalList),
+intersection(TotalAnimalList,NewAnimalList,AnimalList).
+%append(TotalAnimalList,NewAnimalList, AnimalList).
+
+checkFeaturesValue([],_).
+
+checkFeaturesValue([Feature:Value|FeatureList],ReturnAnimalList):-
+getAnimalsValue([Feature:Value],Relephant),
+intersection(Relephant,ReturnAnimalList,CheckedReturnList),
+checkFeaturesValue(FeatureList,CheckedReturnList).
 
 
 % Intersection function
@@ -58,10 +93,3 @@ intersection([X|Y],M,[X|Z]) :- member(X,M), intersection(Y,M,Z).
 intersection([X|Y],M,Z) :- \+ member(X,M), intersection(Y,M,Z).
 intersection([],M,[]).
 
-intersect([],_,[]).
-intersect([X|L],Set,[X|Z]):-
-member(X,Set),!,
-intersect(L,Set,Z).
-intersect([X|L],Set,Z):-
-not(member(X,Set)),
-intersect(L,Set,Z).

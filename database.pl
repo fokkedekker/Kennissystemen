@@ -50,3 +50,6 @@ hasa(gold-fish,gills,2,nil).
 % finss
 hasa(gold-fish, fin,3,nil).
 hasa(dolphin,fin,3,nil).
+
+% Value restrictions
+valueHasa(lion,colour,yellow).
