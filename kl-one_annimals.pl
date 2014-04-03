@@ -68,6 +68,7 @@ findall(Feature:Lower:Uper, hasa(NewAnimal,Feature,Lower,Uper), InheritedHasaLis
 testForHasa(NewIsaList, NewHasaList),
 append(NewHasaList,InheritedHasaList, HasaList).
 
+% predicate to get animals by features
 getAnimals([],[]).
 
 getAnimals([Feature:Lower:Upper|FeatureList], AnimalList):-
