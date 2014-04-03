@@ -48,7 +48,7 @@ hasa(gold-fish,gills,2,nil).
 
 % finss
 hasa(gold-fish, fin,3,nil).
-hasa(dolphin,3,nil).
+hasa(dolphin,fin,3,nil).
 
 % Predicates to test for inheritence
 wrapertestIsa(X,[X|Isalist]):-
@@ -68,11 +68,43 @@ findall(Feature:Lower:Uper, hasa(NewAnimal,Feature,Lower,Uper), InheritedHasaLis
 testForHasa(NewIsaList, NewHasaList),
 append(NewHasaList,InheritedHasaList, HasaList).
 
+hasall(Animal,Feature,Lower,Upper):-
+wrapertestIsa(Animal,P),
+testForHasa(P,Q),
+member(Feature:Lower:Upper,Q).
+
+
+
+
 % predicate to get animals by features
-getAnimals([],[]).
+getAnimals([Feature:Lower:Upper],AnimalList):-
+findall(Animal, hasall(Animal,Feature,Lower,Upper), AnimalList).
 
 getAnimals([Feature:Lower:Upper|FeatureList], AnimalList):-
-findall(Animal, hasa(Animal,Feature,Lower,Upper), NewAnimalList),
+findall(Animal, hasall(Animal,Feature,Lower,Upper), NewAnimalList),
 getAnimals(FeatureList, TotalAnimalList),
-append(TotalAnimalList,NewAnimalList, AnimalList).
+intersection(TotalAnimalList,NewAnimalList,AnimalList).
+%append(TotalAnimalList,NewAnimalList, AnimalList).
 
+checkFeatures([],_).
+
+checkFeatures([Feature:Lower:Upper|FeatureList],ReturnAnimalList):-
+getAnimals([Feature:Lower:Upper],Relephant),
+intersection(Relephant,ReturnAnimalList,CheckedReturnList),
+checkFeatures(FeatureList,CheckedReturnList).
+
+
+
+% Intersection function
+% Source: http://www.csupomona.edu/~jrfisher/www/prolog_tutorial/2_7.html
+intersection([X|Y],M,[X|Z]) :- member(X,M), intersection(Y,M,Z).
+intersection([X|Y],M,Z) :- \+ member(X,M), intersection(Y,M,Z).
+intersection([],M,[]).
+
+intersect([],_,[]).
+intersect([X|L],Set,[X|Z]):-
+member(X,Set),!,
+intersect(L,Set,Z).
+intersect([X|L],Set,Z):-
+not(member(X,Set)),
+intersect(L,Set,Z).
