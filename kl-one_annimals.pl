@@ -35,6 +35,9 @@ wrapertestIsa(Animal,P),
 testForHasa(P,Q),
 member(Feature:Lower:Upper,Q).
 
+
+%intervalMember(Feature:Lower:Upper,Q):-
+%.
 % predicate to get animals by features
 getAnimals([Feature:Lower:Upper],AnimalList):-
 findall(Animal, hasall(Animal,Feature,Lower,Upper), AnimalList).
@@ -45,12 +48,6 @@ getAnimals(FeatureList, TotalAnimalList),
 intersection(TotalAnimalList,NewAnimalList,AnimalList).
 %append(TotalAnimalList,NewAnimalList, AnimalList).
 
-checkFeatures([],_).
-
-checkFeatures([Feature:Lower:Upper|FeatureList],ReturnAnimalList):-
-getAnimals([Feature:Lower:Upper],Relephant),
-intersection(Relephant,ReturnAnimalList,CheckedReturnList),
-checkFeatures(FeatureList,CheckedReturnList).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Value restriction tests %
@@ -85,6 +82,17 @@ checkFeaturesValue([Feature:Value|FeatureList],ReturnAnimalList):-
 getAnimalsValue([Feature:Value],Relephant),
 intersection(Relephant,ReturnAnimalList,CheckedReturnList),
 checkFeaturesValue(FeatureList,CheckedReturnList).
+
+%%%%%%%%%%%%%%
+% Classifier %
+%%%%%%%%%%%%%%
+
+
+
+upMostParent([Anmial|RestAnimals],X):-
+
+
+
 
 
 % Intersection function
