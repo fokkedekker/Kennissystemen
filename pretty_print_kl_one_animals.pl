@@ -19,26 +19,34 @@ show2(All):-
 	All=[First|Rest],
 	wrapertestIsa(First, X),
 	X=[SameAnimal|Parents],
-	inheritanceprinter(First, Parents).
+	print(First),
+	print('\n'),
+	inheritanceprinter(First, Parents),
+	print('     -----------FEATURES'),
+	featureprinter(First),
+	show2(Rest).
 
 inheritanceprinter(Child, []).
 
 inheritanceprinter(Child, [Parent|RestParents]):-	
-	print(Child),
-	print(' is as subsummee of: \n'),
+	print('     is as subsummee of: '),
 	print(Parent),
 	print('       \n'),
 	inheritanceprinter(Child, RestParents).
 
 
 
+
 featureprinter(Animal):-
-	testForHasa([Animal], Features),
-	featureprint(Features).
+	wrapertestIsa(Animal, ListofAnimals),
+	%print(ListofAnimals),
+	testForHasa(ListofAnimals, ListofFeatures),
+	%print(ListofFeatures),
+	featureprint(ListofFeatures).
 %featureprinter(Animal).
 
-%featureprint([]):-
-%	print('\n').
+featureprint([]):-
+	print('\n').
 featureprint([Feature:Lower:Upper|RestFeatures]):-
 	print('\n     has between '),
 	print(Lower),
@@ -46,5 +54,4 @@ featureprint([Feature:Lower:Upper|RestFeatures]):-
 	print(Upper),
 	print(' '),
 	print(Feature),
-	print(' \n').
 	featureprint(RestFeatures).
