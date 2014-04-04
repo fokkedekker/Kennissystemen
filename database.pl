@@ -29,10 +29,10 @@ isa(gold-fish, fish).
 % ---------
 
 % Heterotrophic
-hasa(animal, heterotrophic).
+valueHasa(animal, heterotrophic true).
 
 % Endothermic
-hasa(mammal, endothermic).
+valueHasa(mammal, endothermic, true).
 
 % Wings
 hasa(bird, wing, 2, 2).
@@ -63,4 +63,13 @@ hasa(dolphin,fins,3,nil).
 
 % Value restrictions
 valueHasa(lion,colour,yellow).
-
+valueHasa(gold-fish,colour,gold).
+valueHasa(dolphin,colour,gray).
+valueHasa(croc,colour,green).
+valueHasa(elephant,colour,gray).
+valueHasa(bird,feather,true).
+valueHasa(mouse,size,small).
+valueHasa(elephant,size,large).
+valueHasa(bat,sonar,true).
+valueHasa(croc,herbivore,true).
+valueHasa(lion,herbivore,true).
