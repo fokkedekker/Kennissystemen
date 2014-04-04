@@ -7,7 +7,10 @@
 %Consult database
 :- consult('database.pl').
 
-% Predicates to test for inheritence
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Predicates to test for inheritence %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 wrapertestIsa(X,[X|Isalist]):-
 testForisa(X, Isalist).
 
@@ -35,10 +38,10 @@ wrapertestIsa(Animal,P),
 testForHasa(P,Q),
 member(Feature:Lower:Upper,Q).
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% predicates to get animals by features%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%intervalMember(Feature:Lower:Upper,Q):-
-%.
-% predicate to get animals by features
 getAnimals([Feature:Lower:Upper],AnimalList):-
 findall(Animal, hasall(Animal,Feature,Lower,Upper), AnimalList).
 
@@ -46,7 +49,7 @@ getAnimals([Feature:Lower:Upper|FeatureList], AnimalList):-
 findall(Animal, hasall(Animal,Feature,Lower,Upper), NewAnimalList),
 getAnimals(FeatureList, TotalAnimalList),
 intersection(TotalAnimalList,NewAnimalList,AnimalList).
-%append(TotalAnimalList,NewAnimalList, AnimalList).
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -87,13 +90,19 @@ checkFeaturesValue(FeatureList,CheckedReturnList).
 % Classifier %
 %%%%%%%%%%%%%%
 
+% Classifier for num restricitons
+classifier([NumRes:Lower:Upper|NumAni],X):-
+getAnimals([NumRes:Lower:Upper|NumAni],X).
 
+% Classifier for val restricitions
+classifier([ValRes:Val|ValAni],X):-
+getAnimalsValue([ValRes:Val|ValAni],X).
 
-upMostParent([Anmial|RestAnimals],X):-
-
-
-
-
+% Classifier for both val and num restricitons
+classifier([NumRes:Lower:Upper|NumAni],[ValRes:Val|ValAni],X):-
+getAnimals([NumRes:Lower:Upper|NumAni],NumAnimals),
+getAnimalsValue([ValRes:Val|ValAni],ValAnimals),
+intersection(NumAnimals,ValAnimals,X).
 
 % Intersection function
 % Source: http://www.csupomona.edu/~jrfisher/www/prolog_tutorial/2_7.html
