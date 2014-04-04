@@ -63,4 +63,4 @@ hasa(dolphin,fins,3,nil).
 
 % Value restrictions
 valueHasa(lion,colour,yellow).
-val
+
